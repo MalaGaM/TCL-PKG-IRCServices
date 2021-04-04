@@ -327,13 +327,7 @@ proc ::IRCServices::connection { args } {
 
 
 
-		proc cmd-part { chan {msg ""} } {
-			if { $msg eq "" } {
-				IRCServices:send "PART $chan"
-			} else {
-				IRCServices:send "PART $chan :$msg"
-			}
-		}
+
 
 		proc cmd-quit { {msg {tcl irc services module - https://github.com/MalaGaM/TCL-PKG-IRCServices}} } {
 			IRCServices:send "QUIT :$msg"
@@ -493,6 +487,14 @@ proc ::IRCServices::connection { args } {
 					variable sid
 					variable bid
 					[namespace parent]::IRCServices:send ":$sid SJOIN [unixtime] $chan + :$bid"
+				}
+				proc cmd-part { chan {msg ""} } {
+					variable bid
+					if { $msg eq "" } {
+						[namespace parent]::IRCServices:send ":$bid PART $chan"
+					} else {
+						[namespace parent]::IRCServices:send ":$bid PART $chan :$msg"
+					}
 				}
 				proc cmd-mode { DEST {MODE ""} {CIBLE ""} } {
 					variable bid
