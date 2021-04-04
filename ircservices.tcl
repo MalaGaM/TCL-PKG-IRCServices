@@ -428,10 +428,10 @@ proc ::IRCServices::connection { args } {
 					IRCServices:send "PASS $pass"
 					IRCServices:send "SERVER $sname 1 :Services for IRC Networks"
 					IRCServices:send "EOS"
-				#	IRCServices:send ":$sname NICK $config(service_nick) 1 [unixtime] $config(service_user) $config(service_host) $sname :$config(service_gecos)"
+				#	IRCServices:send ":$sname NICK $config(service_nick) 1 [clock seconds] $config(service_user) $config(service_host) $sname :$config(service_gecos)"
 				}
 			}
-			return 0
+			return 1
 		}
 
 		proc cmd-bot { args } {
@@ -472,7 +472,7 @@ proc ::IRCServices::connection { args } {
 					set bid		[[namespace parent]::UID_GET $bnick]
 					set sid		[set [namespace parent]::sid]
 					[namespace parent]::IRCServices:send ":$sid SQLINE $bnick :Reserved for services"
-					[namespace parent]::IRCServices:send ":$sid UID $bnick 1 [unixtime] $ident $host $bid * $botmodes * * * :$botgecos"
+					[namespace parent]::IRCServices:send ":$sid UID $bnick 1 [clock seconds] $ident $host $bid * $botmodes * * * :$botgecos"
 					return 0
 				}
 				proc cmd-privmsg { target msg } {
@@ -486,7 +486,7 @@ proc ::IRCServices::connection { args } {
 				proc cmd-join { chan } {
 					variable sid
 					variable bid
-					[namespace parent]::IRCServices:send ":$sid SJOIN [unixtime] $chan + :$bid"
+					[namespace parent]::IRCServices:send ":$sid SJOIN [clock seconds] $chan + :$bid"
 				}
 				proc cmd-part { chan {msg ""} } {
 					variable bid
