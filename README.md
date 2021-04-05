@@ -1,21 +1,31 @@
+- [TCL-PKG-IRCServices](#tcl-pkg-ircservices)
+- [!!! VERSION TEST !!!](#-version-test-)
+- [Téléchargement](#téléchargement)
+	- [Avec git :](#avec-git-)
+	- [Avec wget :](#avec-wget-)
+- [Installation](#installation)
+	- [avec setup.tcl (systeme) :](#avec-setuptcl-systeme-)
+	- [avec auto_path (userdir):](#avec-auto_path-userdir)
+- [Utilisation](#utilisation)
 # TCL-PKG-IRCServices
 Package IRC Services
 
 IRCServices creer une interface en TCL et la connexion d'un Service à un IRCD (comme anope).
 
 # !!! VERSION TEST !!!
-Merci d'etre indulgent et repport bugs, idées, etc sur 
+Developper et tester sur unrealircd v5+
 
+Merci d'etre indulgent et repport bugs, idées, etc sur 
 * [Creer un ticket](https://github.com/MalaGaM/TCL-PKG-IRCServices/issues/new)
 * [Site web: IRCServices](https://github.com/MalaGaM/TCL-PKG-IRCServices)
 
 
 # Téléchargement
-## avec git :
+## Avec git :
 
 `git clone https://github.com/MalaGaM/TCL-PKG-IRCServices.git /path/to/install`
 
-## avec wget :
+## Avec wget :
 
 ```bash
 wget https://github.com/MalaGaM/TCL-PKG-IRCServices/archive/refs/heads/main.zip -O /path/to/install/TCL-PKG-IRCServices.zip

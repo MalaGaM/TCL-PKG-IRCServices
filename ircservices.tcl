@@ -409,6 +409,7 @@ proc ::IRCServices::connection { args } {
 				set port	$s_port
 			}
 			if { $secure == 1 } {
+				package require tls $::IRCServices::pkg_vers_min_need_tls
 				set socket_binary "::tls::socket -require 0 -request 0 -command \"[namespace current]::TLSSocketCallBack $sock\""
 			} else {
 				set socket_binary ::socket
@@ -795,6 +796,5 @@ proc ::IRCServices::connection { args } {
 
 package provide IRCServices $::IRCServices::pkg_vers
 package require Tcl $::IRCServices::pkg_vers_min_need_tcl
-package require tls $::IRCServices::pkg_vers_min_need_tls
 # -------------------------------------------------------------------------
 return
