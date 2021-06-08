@@ -9,7 +9,7 @@
 # -------------------------------------------------------------------------
 
 namespace eval ::IRCServices {
-	variable pkg_vers 0.0.1
+	variable pkg_vers 0.0.4
 	variable pkg_vers_min_need_tcl 8.6
 	variable pkg_vers_min_need_tls 1.7.20
 	# counter used to differentiate connections
@@ -171,10 +171,10 @@ proc ::IRCServices::connection { args } {
 			}
 		}
 
-		# IRCServices:send --
+		# send --
 		# send text to the IRC server
 
-		proc IRCServices:send { msg } {
+		proc send { msg } {
 			variable sock
 			variable dispatch
 			if { $sock eq "" } { return }
@@ -224,6 +224,7 @@ proc ::IRCServices::connection { args } {
 				return 0
 			}
 		}
+
 		#########################################################
 		# Implemented user-side commands, meaning that these commands
 		# cause the calling user to perform the given action.
@@ -285,6 +286,7 @@ proc ::IRCServices::connection { args } {
 			if { ![info exists logger] } return
 			return $logger
 		}
+		
 
 		# cmd-destroy --
 		#
@@ -306,56 +308,63 @@ proc ::IRCServices::connection { args } {
 
 		proc cmd-user { username hostname servername {userinfo ""} } {
 			if { $userinfo eq "" } {
-				IRCServices:send "USER $username $hostname server :$servername"
+				send "USER $username $hostname server :$servername"
 			} else {
-				IRCServices:send "USER $username $hostname $servername :$userinfo"
+				send "USER $username $hostname $servername :$userinfo"
 			}
 		}
 
 
 		proc cmd-ping { target } {
-			IRCServices:send "PRIVMSG $target :\001PING [clock seconds]\001"
+			send "PRIVMSG $target :\001PING [clock seconds]\001"
 		}
 
 		proc cmd-serverping { } {
-			IRCServices:send "PING [clock seconds]"
+			send "PING [clock seconds]"
 		}
 
 		proc cmd-ctcp { target line } {
-			IRCServices:send "PRIVMSG $target :\001$line\001"
+			send "PRIVMSG $target :\001$line\001"
 		}
 
-
-
-
-
 		proc cmd-quit { {msg {tcl irc services module - https://github.com/MalaGaM/TCL-PKG-IRCServices}} } {
-			IRCServices:send "QUIT :$msg"
+			send "QUIT :$msg"
 		}
 
 		proc cmd-notice { target msg } {
-			IRCServices:send "NOTICE $target :$msg"
+			send "NOTICE $target :$msg"
 		}
 
 		proc cmd-kick { chan target {msg {}} } {
-			IRCServices:send "KICK $chan $target :$msg"
+			send "KICK $chan $target :$msg"
 		}
 
 		proc cmd-mode { DEST {MODE ""} {CIBLE ""} } {
 			variable sid
-			IRCServices:send ":$sid MODE $DEST $MODE $CIBLE"
+			send ":$sid MODE $DEST $MODE $CIBLE"
 		}
 
 		proc cmd-topic { chan msg } {
-			IRCServices:send "TOPIC $chan :$msg"
+			send "TOPIC $chan :$msg"
+		}
+
+		proc cmd-vusercreate { usernick username {userhost {localhost}} {usergecos {Package TCL IRCServices}} {usermodes {+qioS}} } {
+			variable sid
+			if { [UID_EXIST $usernick] } {
+				set usernick ${usernick}_2
+				set username ${username}2
+			}
+			set VU_UID		[UID_GET $usernick]
+			send ":$sid UID $usernick 1 [clock seconds] $username $userhost $VU_UID * $usermodes * * * :$usergecos"
+			return $VU_UID
 		}
 
 		proc cmd-invite { chan target } {
-			IRCServices:send "INVITE $target $chan"
+			send "INVITE $target $chan"
 		}
 
 		proc cmd-send { line } {
-			IRCServices:send $line
+			send $line
 		}
 
 		proc cmd-peername { } {
@@ -419,17 +428,17 @@ proc ::IRCServices::connection { args } {
 				fconfigure $sock -translation crlf -buffering line
 				fileevent $sock readable [namespace current]::GetEvent
 				if { $ts6 } {
-					IRCServices:send "PASS :$pass"
-					IRCServices:send "PROTOCTL NICKv2 VHP UMODE2 NICKIP SJOIN SJOIN2 SJ3 NOQUIT TKLEXT MLOCK SID"
-					IRCServices:send "PROTOCTL EAUTH=$sname,,,IRCService-0.0.1"
-					IRCServices:send "PROTOCTL SID=$sid"
-					IRCServices:send ":$sid SERVER $sname 1 :Services for IRC Networks"
-					IRCServices:send "EOS"
+					send "PASS :$pass"
+					send "PROTOCTL NICKv2 VHP UMODE2 NICKIP SJOIN SJOIN2 SJ3 NOQUIT TKLEXT MLOCK SID"
+					send "PROTOCTL EAUTH=$sname,,,IRCService-0.0.1"
+					send "PROTOCTL SID=$sid"
+					send ":$sid SERVER $sname 1 :Services for IRC Networks"
+					send "EOS"
 				} else {
-					IRCServices:send "PASS $pass"
-					IRCServices:send "SERVER $sname 1 :Services for IRC Networks"
-					IRCServices:send "EOS"
-				#	IRCServices:send ":$sname NICK $config(service_nick) 1 [clock seconds] $config(service_user) $config(service_host) $sname :$config(service_gecos)"
+					send "PASS $pass"
+					send "SERVER $sname 1 :Services for IRC Networks"
+					send "EOS"
+				#	send ":$sname NICK $config(service_nick) 1 [clock seconds] $config(service_user) $config(service_host) $sname :$config(service_gecos)"
 				}
 			}
 			return 1
@@ -472,34 +481,41 @@ proc ::IRCServices::connection { args } {
 					set host	$bothost
 					set bid		[[namespace parent]::UID_GET $bnick]
 					set sid		[set [namespace parent]::sid]
-					[namespace parent]::IRCServices:send ":$sid SQLINE $bnick :Reserved for services"
-					[namespace parent]::IRCServices:send ":$sid UID $bnick 1 [clock seconds] $ident $host $bid * $botmodes * * * :$botgecos"
+					[namespace parent]::send ":$sid SQLINE $bnick :Reserved for services"
+					[namespace parent]::send ":$sid UID $bnick 1 [clock seconds] $ident $host $bid * $botmodes * * * :$botgecos"
 					return 0
 				}
 				proc cmd-privmsg { target msg } {
 					variable bid
-					[namespace parent]::IRCServices:send ":$bid PRIVMSG $target :$msg"
+					[namespace parent]::send ":$bid PRIVMSG $target :$msg"
 				}
 				proc cmd-notice { target msg } {
 					variable bid
-					[namespace parent]::IRCServices:send ":$bid NOTICE $target :$msg"
+					[namespace parent]::send ":$bid NOTICE $target :$msg"
 				}
 				proc cmd-join { chan } {
 					variable sid
 					variable bid
-					[namespace parent]::IRCServices:send ":$sid SJOIN [clock seconds] $chan + :$bid"
+					[namespace parent]::send ":$sid SJOIN [clock seconds] $chan + :$bid"
 				}
 				proc cmd-part { chan {msg ""} } {
 					variable bid
 					if { $msg eq "" } {
-						[namespace parent]::IRCServices:send ":$bid PART $chan"
+						[namespace parent]::send ":$bid PART $chan"
 					} else {
-						[namespace parent]::IRCServices:send ":$bid PART $chan :$msg"
+						[namespace parent]::send ":$bid PART $chan :$msg"
 					}
 				}
 				proc cmd-mode { DEST {MODE ""} {CIBLE ""} } {
 					variable bid
-					[namespace parent]::IRCServices:send ":$bid MODE $DEST $MODE $CIBLE"
+					[namespace parent]::send ":$bid MODE $DEST $MODE $CIBLE"
+				}
+				proc cmd-send { line } {
+					[namespace parent]::send $line
+				}
+				proc cmd-mesend { line } {
+					variable bid
+					[namespace parent]::send ":$bid $line"
 				}
 				# registerevent --
 
@@ -545,15 +561,19 @@ proc ::IRCServices::connection { args } {
 					return [info exists dispatch($evnt)]
 				}
 				proc bot { cmd args } {
-					eval [linsert $args 0 [namespace current]::cmd-$cmd]
+					if { [info proc [namespace current]::cmd-$cmd] == "" } {
+						return "sub-cmd inconnu. List: [join [string map [list "[namespace current]::cmd-" ""] [info proc [namespace current]::cmd-*]] ", "]"
+					} else {
+						eval [linsert $args 0 [namespace current]::cmd-$cmd]
+					}
 				}
 				
 				# Create default handlers.
 
-				set dispatch(PING) {network send "PONG :[msg]"}
-				set dispatch(defaultevent) #
-				set dispatch(defaultcmd) #
-				set dispatch(defaultnumeric) #
+				set dispatch(PING)				{network send "PONG :[msg]"}
+				set dispatch(defaultevent)		#
+				set dispatch(defaultcmd)		#
+				set dispatch(defaultnumeric)	#
 			}
 			
 
@@ -641,6 +661,11 @@ proc ::IRCServices::connection { args } {
 			return $linedata(additional)
 		}
 
+		proc rawline { } {
+			variable linedata
+			return $linedata(rawline)
+		}
+
 		# header --
 
 		# Returns the entire header in list format.
@@ -685,6 +710,7 @@ proc ::IRCServices::connection { args } {
 			} else {
 				set header				[linsert [split $header] 0 {}]
 			}
+			set linedata(rawline)		$line
 			set linedata(who)			[lindex $header 0]
 			set linedata(who2)			[[namespace current]::UID_CONVERT $linedata(who)]
 			set linedata(action)		[lindex $header 1]
@@ -696,7 +722,7 @@ proc ::IRCServices::connection { args } {
 			foreach t [namespace children] {
 				set linedata(bid)			${t}::bot
 				if { [info exists ${t}::dispatch($linedata(action))] } {
-					eval [set ${t}::dispatch($linedata(action))]
+					catch {eval [set ${t}::dispatch($linedata(action))]}
 				} elseif { [string match {[0-9]??} ${t}::dispatch(action)] } {
 					eval [set ${t}::dispatch(defaultnumeric)]
 				} elseif { $linedata(who) eq "" } {
@@ -706,7 +732,7 @@ proc ::IRCServices::connection { args } {
 				}
 			}
 			if { [info exists dispatch($linedata(action))] } {
-				eval $dispatch($linedata(action))
+				catch {eval $dispatch($linedata(action))}
 			} elseif { [string match {[0-9]??} $linedata(action)] } {
 				eval $dispatch(defaultnumeric)
 			} elseif { $linedata(who) eq "" } {
@@ -775,7 +801,11 @@ proc ::IRCServices::connection { args } {
 		# args: arguments to the command
 
 		proc network { cmd args } {
-			eval [linsert $args 0 [namespace current]::cmd-$cmd]
+			if { [info proc [namespace current]::cmd-$cmd] == "" } {
+				return "sub-cmd inconnu. List: [join [string map [list "[namespace current]::cmd-" ""] [info proc [namespace current]::cmd-*]] ", "]"
+			} else {
+				eval [linsert $args 0 [namespace current]::cmd-$cmd]
+			}
 		}
 
 		# Create default handlers.

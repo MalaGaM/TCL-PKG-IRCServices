@@ -8,4 +8,4 @@
 # script is sourced, the variable $dir must contain the
 # full path name of this file's directory.
 
-package ifneeded IRCServices 0.0.1 [list source [file join $dir ircservices.tcl]]
+package ifneeded IRCServices 0.0.4 [list source [file join $dir ircservices.tcl]]
