@@ -198,7 +198,7 @@ proc ::IRCServices::connection { args } {
 				return "$UID_DB([string toupper $user])"
 			} else {
 				if { $UID_LAST_INSERT == "" } {
-					set UID_LAST_INSERT		"${sid}AAAAA@"
+					set UID_LAST_INSERT		"${sid}AAAAAA"
 					return $UID_LAST_INSERT
 				}
 				set UID_NOW							[::IRCServices::incrementChar $UID_LAST_INSERT]
