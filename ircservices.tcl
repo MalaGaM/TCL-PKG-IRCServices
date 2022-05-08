@@ -11,7 +11,7 @@
 namespace eval ::IRCServices {
 	variable pkg_vers 0.0.4
 	variable pkg_vers_min_need_tcl 8.6
-	variable pkg_vers_min_need_tls 1.7.20
+	variable pkg_vers_min_need_tls 1.7.16
 	# counter used to differentiate connections
 	variable conn 0
 	variable botn 0
