@@ -16,19 +16,19 @@ IRCServices creer une interface en TCL et la connexion d'un Service à un IRCD (
 Developper et tester sur unrealircd v5+
 
 Merci d'etre indulgent et repport bugs, idées, etc sur 
-* [Creer un ticket](https://github.com/MalaGaM/TCL-PKG-IRCServices/issues/new)
-* [Site web: IRCServices](https://github.com/MalaGaM/TCL-PKG-IRCServices)
+* [Creer un ticket](https://github.com/ZarTek-Creole/TCL-PKG-IRCServices/issues/new)
+* [Site web: IRCServices](https://github.com/ZarTek-Creole/TCL-PKG-IRCServices)
 
 
 # Téléchargement
 ## Avec git :
 
-`git clone https://github.com/MalaGaM/TCL-PKG-IRCServices.git /path/to/install`
+`git clone https://github.com/ZarTek-Creole/TCL-PKG-IRCServices.git /path/to/install`
 
 ## Avec wget :
 
 ```bash
-wget https://github.com/MalaGaM/TCL-PKG-IRCServices/archive/refs/heads/main.zip -O /path/to/install/TCL-PKG-IRCServices.zip
+wget https://github.com/ZarTek-Creole/TCL-PKG-IRCServices/archive/refs/heads/main.zip -O /path/to/install/TCL-PKG-IRCServices.zip
 unzip -x TCL-PKG-IRCServices.zip
 rm TCL-PKG-IRCServices.zip
 ```
