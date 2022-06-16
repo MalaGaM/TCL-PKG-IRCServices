@@ -9,9 +9,13 @@
 # -------------------------------------------------------------------------
 
 namespace eval ::IRCServices {
-	variable pkg_vers 0.0.4
-	variable pkg_vers_min_need_tcl 8.6
-	variable pkg_vers_min_need_tls 1.7.16
+	variable pkg 
+	array set pkg {
+		"version"	"0.0.4"
+		"need_tcl"	"8.6"
+		"need_tls"	"1.7.16"
+		"name"		"package IRCServices"
+	}
 	# counter used to differentiate connections
 	variable conn 0
 	variable botn 0
@@ -403,6 +407,7 @@ proc ::IRCServices::connection { args } {
 			variable pass
 			variable sname
 			variable sid
+			variable ::IRCServices::pkg
 
 			set host	$hostname
 			set s_port	$port
@@ -418,7 +423,9 @@ proc ::IRCServices::connection { args } {
 				set port	$s_port
 			}
 			if { $secure == 1 } {
-				package require tls $::IRCServices::pkg_vers_min_need_tls
+				if { [catch { package require tls ${pkg(need_tls)} }] } { 
+					die "\[${pkg(name)} - Erreur\] Nécessite le package tls ${pkg(need_tls)} (ou plus) pour fonctionner, Télécharger sur 'https://core.tcl-lang.org/tcltls/index'. Le chargement du package a été annulé." ;
+				}
 				set socket_binary "::tls::socket -require 0 -request 0 -command \"[namespace current]::TLSSocketCallBack $sock\""
 			} else {
 				set socket_binary ::socket
@@ -824,7 +831,7 @@ proc ::IRCServices::connection { args } {
 
 # -------------------------------------------------------------------------
 
-package provide IRCServices $::IRCServices::pkg_vers
-package require Tcl $::IRCServices::pkg_vers_min_need_tcl
+package provide IRCServices ${::IRCServices::pkg(version)}
+package require Tcl ${::IRCServices::pkg(need_tcl)}
 # -------------------------------------------------------------------------
 return
