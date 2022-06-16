@@ -11,10 +11,11 @@
 namespace eval ::IRCServices {
 	variable pkg 
 	array set pkg {
-		"version"	"0.0.4"
-		"need_tcl"	"8.6"
-		"need_tls"	"1.7.16"
-		"name"		"package IRCServices"
+		"version"		"0.0.4"
+		"need_tcl"		"8.6"
+		"need_tls"		"1.7.16"
+		"need_logger"	"0.9.4"
+		"name"			"package IRCServices"
 	}
 	# counter used to differentiate connections
 	variable conn 0
@@ -25,6 +26,13 @@ namespace eval ::IRCServices {
 	array set config {
 		debug  0
 		logger 0
+	}
+
+	if { [catch { package require Tcl ${pkg(need_tcl)} }] } {
+		die "\[${pkg(name)} - Erreur\] Nécessite le package Tcl ${pkg(need_tcl)} (ou plus) pour fonctionner, Télécharger sur 'https://www.tcl.tk'." ;
+	}
+	if { [catch { package require logger ${pkg(need_logger)} }] } {
+		die "\[${pkg(name)} - Erreur\] Nécessite le package logger ${pkg(need_logger)} (ou plus) pour fonctionner, Télécharger sur 'https://www.tcl.tk/software/tcllib'." ;
 	}
 }
 
@@ -156,7 +164,6 @@ proc ::IRCServices::connection { args } {
 		set UID_LAST_INSERT	{}
 		array set config	[array get ::IRCServices::config]
 		if { $config(logger) || $config(debug) } {
-			package require logger
 			variable logger
 			set logger [logger::init [namespace tail [namespace current]]]
 			if { !$config(debug) } { ${logger}::disable debug }
@@ -269,7 +276,6 @@ proc ::IRCServices::connection { args } {
 			}
 			if { $key eq "logger" } {
 				if { $value && !$config(logger)} {
-					package require logger
 					set logger [logger::init [namespace tail [namespace current]]]
 				} elseif { [info exists logger] } {
 					${logger}::delete
@@ -431,13 +437,15 @@ proc ::IRCServices::connection { args } {
 				set socket_binary ::socket
 			}
 	 		if { $sock eq "" } {
-				set sock [{*}$socket_binary $host $port]
+				if { [catch {
+					set sock [{*}$socket_binary $host $port]
+				} err] } { die "\[${pkg(name)} - Erreur\] Impossible de ce connecter sur $host:$port: $err" }
 				fconfigure $sock -translation crlf -buffering line
 				fileevent $sock readable [namespace current]::GetEvent
 				if { $ts6 } {
 					send "PASS :$pass"
 					send "PROTOCTL NICKv2 VHP UMODE2 NICKIP SJOIN SJOIN2 SJ3 NOQUIT TKLEXT MLOCK SID"
-					send "PROTOCTL EAUTH=$sname,,,IRCService-0.0.1"
+					send "PROTOCTL EAUTH=$sname,,,IRCService-${pkg(version)}"
 					send "PROTOCTL SID=$sid"
 					send ":$sid SERVER $sname 1 :Services for IRC Networks"
 					send "EOS"
@@ -832,6 +840,5 @@ proc ::IRCServices::connection { args } {
 # -------------------------------------------------------------------------
 
 package provide IRCServices ${::IRCServices::pkg(version)}
-package require Tcl ${::IRCServices::pkg(need_tcl)}
 # -------------------------------------------------------------------------
 return
