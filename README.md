@@ -83,8 +83,8 @@ wrong # args: should be "::IRCServices::IRCServices0::b0::cmd-create botnick bot
                 ##########################
                 # si [target] ne commence pas par # c'est un pseudo
                 if { [string index [target] 0] != "#"} {
-                        if { $cmd == "help"             }       { 
-                                puts "PRIV: [who2] [target] $cmd $data"
+                        if { ${cmd} == "help"             }       { 
+                                puts "PRIV: [who2] [target] ${cmd} ${data}"
                         }
                 }
                 ##########################
@@ -92,8 +92,8 @@ wrong # args: should be "::IRCServices::IRCServices0::b0::cmd-create botnick bot
                 ##########################
                 # si [target] commence par # c'est un salon
                 if { [string index [target] 0] == "#"} {
-                        if { $cmd == "!cmds"    }       { 
-                                puts "PUB: [who] [target] $cmd $data"
+                        if { ${cmd} == "!cmds"    }       { 
+                                puts "PUB: [who] [target] ${cmd} ${data}"
                         }
                 }
         }; # Creer un event sur PRIVMSG

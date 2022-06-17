@@ -1,6 +1,7 @@
 # irc.tcl --
 #
 #	irc services implementation for Tcl.
+# based from irc package by tcllib
 #
 # -------------------------------------------------------------------------
 
@@ -13,20 +14,20 @@ namespace eval ::IRCServices {
 	variable DIR
 	set DIR(CUR)			[file dirname [file dirname [file normalize [file join [info script] ...]]]]
 	array set pkg {
-		"version"		"0.0.4"
-		"need_tcl"		"8.6"
-		"need_tls"		"1.7.16"
-		"need_logger"	"0.9.4"
-		"need_zct"		"0.0.1"
-		"name"			"package IRCServices"
+		"version"			"0.0.5"
+		"need_tcl"			"8.6"
+		"need_tls"			"1.7.16"
+		"need_logger"		"0.9.4"
+		"need_zct"			"0.0.1"
+		"name"				"package IRCServices"
 	}
 	# counter used to differentiate connections
-	variable conn 0
-	variable botn 0
+	variable conn			0
+	variable botn 			0
 	variable config
-	variable irctclfile [info script]
-	variable newCharArray [list]
-	array set config {
+	variable irctclfile 	[info script]
+	variable newCharArray	[list]
+	array set config 		{
 		debug  0
 		logger 0
 	}
@@ -39,17 +40,17 @@ namespace eval ::IRCServices {
 	}
 
 	proc ::IRCServices::nextLetter  { char } {
-		if { $char == "Z" } { set char "A" }
-		scan $char %c i;
-		set ALPHA_NEW [format %c [expr $i+1]]
-		return $ALPHA_NEW
+		if { ${char} == "Z" } { set char "A" }
+		scan ${char} %c i;
+		set ALPHA_NEW [format %c [expr ${i}+1]]
+		return ${ALPHA_NEW}
 	}
 	proc ::IRCServices::unshift { words } {
 		set RES ""
-		for {set i [string length $words] } {0 < $i} {set i [expr $i-1]} {
-			set RES "$RES[string index $words [expr $i-1]]"
+		for {set i [string length ${words}] } {0 < $i} {set i [expr ${i}-1]} {
+			set RES "${RES}[string index ${words} [expr ${i}-1]]"
 		}
-		return $RES
+		return ${RES}
 	}
 	proc ::IRCServices::incrementChar { l } {
 		global newCharArray
@@ -150,7 +151,7 @@ namespace eval ::IRCServices {
 
 		set name [format "%s::IRCServices%s" [namespace current] $conn]
 
-		namespace eval $name {
+		namespace eval ${name} {
 			variable sock
 			variable dispatch
 			variable linedata
@@ -165,7 +166,7 @@ namespace eval ::IRCServices {
 			array set linedata	{}
 			set UID_LAST_INSERT	{}
 			array set config	[array get ::IRCServices::config]
-			if { $config(logger) || $config(debug) } {
+			if { ${config(logger)} || $config(debug) } {
 				variable logger
 				set logger [logger::init [namespace tail [namespace current]]]
 				if { !$config(debug) } { ${logger}::disable debug }
@@ -175,12 +176,12 @@ namespace eval ::IRCServices {
 				set type		[lindex $args 1]
 				set socketid	[lindex $args 2]
 				set what		[lrange $args 3 end]
-				cmd-log debug "Socket '$SOCKET_NAME' callback $type: $what"
-				if { [string match -nocase "*certificate*verify*failed*" $what] } {
-					cmd-log error "ReplicaServ Socket erreur: Vous essayez de vous connecter a un serveur TLS auto-signé. ($what) [tls::status $socketid]"
+				cmd-log debug "Socket '${SOCKET_NAME}' callback ${type}: ${what}"
+				if { [string match -nocase "*certificate*verify*failed*" ${what}] } {
+					cmd-log error "IRCServices Socket erreur: Vous essayez de vous connecter a un serveur TLS auto-signé. (${what}) [tls::status ${socketid}]"
 				}
-				if { [string match -nocase "*wrong*version*number*" $what] } {
-					cmd-log error "ReplicaServ Socket erreur: Vous essayez sans doute de connecter en SSL sur un port Non-SSL. ($what)"
+				if { [string match -nocase "*wrong*version*number*" ${what}] } {
+					cmd-log error "IRCServices Socket erreur: Vous essayez sans doute de connecter en SSL sur un port Non-SSL. (${what})"
 				}
 			}
 
@@ -190,10 +191,10 @@ namespace eval ::IRCServices {
 			proc send { msg } {
 				variable sock
 				variable dispatch
-				if { $sock eq "" } { return }
+				if { ${sock}  eq "" } { return }
 				cmd-log debug "send: '$msg'"
-				if { [catch {puts $sock $msg} err] } {
-					catch { close $sock }
+				if { [catch {puts ${sock}  $msg} err] } {
+					catch { close ${sock}  }
 					set sock {}
 					if { [info exists dispatch(EOF)] } {
 						eval $dispatch(EOF)
@@ -270,14 +271,14 @@ namespace eval ::IRCServices {
 				set value	[lindex $args 1]
 				if { $key eq "debug" } {
 					if {$value} {
-						if { !$config(logger) } { cmd-config logger 1 }
+						if { !${config(logger)} } { cmd-config logger 1 }
 						${logger}::enable debug
 					} elseif { [info exists logger] } {
 						${logger}::disable debug
 					}
 				}
 				if { $key eq "logger" } {
-					if { $value && !$config(logger)} {
+					if { $value && !${config(logger)}} {
 						set logger [logger::init [namespace tail [namespace current]]]
 					} elseif { [info exists logger] } {
 						${logger}::delete
@@ -308,27 +309,27 @@ namespace eval ::IRCServices {
 				variable logger
 				variable sock
 				if { [info exists logger] } { ${logger}::delete }
-				catch {close $sock}
+				catch { close ${sock} }
 				namespace delete [namespace current]
 			}
 
 			proc cmd-connected { } {
 				variable sock
-				if { $sock eq "" } { return 0 }
+				if { ${sock} eq "" } { return 0 }
 				return 1
 			}
 
 			proc cmd-user { username hostname servername {userinfo ""} } {
-				if { $userinfo eq "" } {
-					send "USER $username $hostname server :$servername"
+				if { ${userinfo} eq "" } {
+					send "USER ${username} ${hostname} server :${servername}"
 				} else {
-					send "USER $username $hostname $servername :$userinfo"
+					send "USER ${username} ${hostname} ${servername} :${userinfo}"
 				}
 			}
 
 
 			proc cmd-ping { target } {
-				send "PRIVMSG $target :\001PING [clock seconds]\001"
+				send "PRIVMSG ${target} :\001PING [clock seconds]\001"
 			}
 
 			proc cmd-serverping { } {
@@ -381,26 +382,26 @@ namespace eval ::IRCServices {
 
 			proc cmd-peername { } {
 				variable sock
-				if { $sock eq "" } { return {} }
-				return [fconfigure $sock -peername]
+				if { ${sock} eq "" } { return {} }
+				return [fconfigure ${sock} -peername]
 			}
 
 			proc cmd-sockname { } {
 				variable sock
-				if { $sock eq "" } { return {} }
-				return [fconfigure $sock -sockname]
+				if { ${sock} eq "" } { return {} }
+				return [fconfigure ${sock} -sockname]
 			}
 
 			proc cmd-socket { } {
 				variable sock
-				return $sock
+				return ${sock}
 			}
 
 
 			proc cmd-disconnect { } {
 				variable sock
-				if { $sock eq "" } { return -1 }
-				catch { close $sock }
+				if { ${sock} eq "" } { return -1 }
+				catch { close ${sock} }
 				set sock {}
 				return 0
 			}
@@ -434,16 +435,16 @@ namespace eval ::IRCServices {
 					if { [catch { package require tls ${pkg(need_tls)} }] } {
 						die "\[${pkg(name)} - Erreur\] Nécessite le package tls ${pkg(need_tls)} (ou plus) pour fonctionner, Télécharger sur 'https://core.tcl-lang.org/tcltls/index'. Le chargement du package a été annulé." ;
 					}
-					set socket_binary "::tls::socket -require 0 -request 0 -command \"[namespace current]::TLSSocketCallBack $sock\""
+					set socket_binary "::tls::socket -require 0 -request 0 -command \"[namespace current]::TLSSocketCallBack ${sock}\""
 				} else {
 					set socket_binary ::socket
 				}
-				if { $sock eq "" } {
+				if { ${sock} eq "" } {
 					if { [catch {
-						set sock [{*}$socket_binary $host $port]
+						set sock [{*}${socket_binary} $host $port]
 						} err] } { die "\[${pkg(name)} - Erreur\] Impossible de ce connecter sur $host:$port: $err" }
-						fconfigure $sock -translation crlf -buffering line
-						fileevent $sock readable [namespace current]::GetEvent
+						fconfigure ${sock}  -translation crlf -buffering line
+						fileevent ${sock} readable [namespace current]::GetEvent
 						if { $ts6 } {
 							send "PASS :$pass"
 							send "PROTOCTL NICKv2 VHP UMODE2 NICKIP SJOIN SJOIN2 SJ3 NOQUIT TKLEXT MLOCK SID"
@@ -596,7 +597,7 @@ namespace eval ::IRCServices {
 
 					set returncommand [format "%s::b%s::bot" [namespace current] $botn]
 					incr botn
-					return $returncommand
+					return ${returncommand}
 				}
 
 				# Callback API:
@@ -693,10 +694,6 @@ namespace eval ::IRCServices {
 						$linedata(target)] $linedata(additional)]
 				}
 
-				# GetEvent --
-
-				# Get a line from the server and dispatch it.
-
 				proc GetError { Message } {
 					set RE_Closing	{ERROR\s:Closing\sLink:\s([^\[]+)\[([^\]]+)\]\s\((.*)\)}
 					set DIE ""
@@ -712,6 +709,10 @@ namespace eval ::IRCServices {
 					if { ${DIE} != ""} { die "\[Error - IRCServices\] ${DIE}" }
 
 				}
+
+				# GetEvent --
+
+				# Get a line from the server and dispatch it.
 				proc GetEvent { } {
 					variable linedata
 					variable sock
@@ -719,8 +720,8 @@ namespace eval ::IRCServices {
 					variable [namespace current]::UID_DB
 					array set linedata	{}
 					set line "eof"
-					if { [eof $sock] || [catch {gets $sock} line] } {
-						close $sock
+					if { [eof ${sock} ] || [catch {gets ${sock} } line] } {
+						close ${sock}
 						set sock		{}
 						cmd-log error "Error receiving from network: $line"
 						if { [info exists dispatch(EOF)] } {
@@ -729,16 +730,18 @@ namespace eval ::IRCServices {
 						die "Error IRCServices: perte de la connexion au serveur"
 						return
 					}
+					set line [string map { "\{" "\\\{" "\}" "\\\}"} $line]
 					cmd-log debug "Recieved: $line"
 					if { [string match -nocase "error*" [lindex $line 0]] } { GetError $line }
 					if { [set pos [string first " :" $line]] > -1 } {
 						set header				[string range $line 0 [expr {$pos - 1}]]
 						set linedata(msg)		[string range $line [expr {$pos + 2}] end]
+
 					} else {
 						set header [string trim $line]
 						set linedata(msg)		{}
-					}
 
+					}
 					if { [string match :* $header] } {
 						set header				[split [string trimleft $header :]]
 					} else {
