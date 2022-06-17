@@ -700,8 +700,14 @@ namespace eval ::IRCServices {
 				proc GetError { Message } {
 					set RE_Closing	{ERROR\s:Closing\sLink:\s([^\[]+)\[([^\]]+)\]\s\((.*)\)}
 					set DIE ""
+					# connexion du services fermer par le serveur
 					if { [regexp -nocase ${RE_Closing} ${Message} match hostname ip raison] } {
-						set DIE	"Authentification du service '${hostname}' à échoué (mot de passe?)"
+						if {[string match -nocase "*Authentication*failed*" ${raison}]} {
+							set DIE	"Authentification du service '${hostname}' à échoué (mot de passe?)"
+						} elseif {[string match -nocase "*SID*collision*" ${raison}]} {
+							set DIE	"Le SID (Server ID) est déjà utiliser. Choisissez un autre."
+						}
+
 					}
 					if { ${DIE} != ""} { die "\[Error - IRCServices\] ${DIE}" }
 
