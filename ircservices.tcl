@@ -31,50 +31,13 @@ namespace eval ::IRCServices {
 		debug  0
 		logger 0
 	}
-	# Verification si le package ZCT a été mis dans le projet courant et si oui  le sourcé(charger)
-	if { [file exists ${DIR(CUR)}/TCL-ZCT/ZCT.tcl] && [catch { source ${DIR(CUR)}/TCL-ZCT/ZCT.tcl  } err] } { die "\[${PKG(name)} - Erreur\] Chargement '${DIR(CUR)}/TCL-ZCT/ZCT.tcl' à échoué: ${err}"; }
-	# Necesite le package ZCT, tentative de chargment de celui-ci
-	if { [catch { package require ZCT ${PKG(need_zct)} } err] } { die "\[${PKG(name)} - Erreur\] Nécessite le package ZCT ${PKG(need_zct)} (ou supérieur) pour fonctionner.\nLe chargement du script a été annulé.\nTélécharger-le sur 'https://github.com/ZarTek-Creole/TCL-ZCT'.\n$err" ; }
-	# Importation des fonctions de ZTC
-	namespace import -force ::ZCT::*
-	pkg load Tcl ${PKG(need_tcl)} ${PKG(name)}
-	pkg load logger ${PKG(need_logger)} ${PKG(name)}
-
-}
-proc ::IRCServices::nextLetter  { char } {
-	if { ${char} == "Z" } { set char "A" }
-	scan ${char} %c i;
-	set ALPHA_NEW [format %c [expr ${i}+1]]
-	return ${ALPHA_NEW}
-}
-proc ::IRCServices::unshift { words } {
-	set RES ""
-	for {set i [string length ${words}] } {0 < $i} {set i [expr ${i}-1]} {
-		set RES "${RES}[string index ${words} [expr ${i}-1]]"
-	}
-	return ${RES}
-}
-proc ::IRCServices::incrementChar { l } {
-	global newCharArray
-	set l [string toupper $l]
-	set lastChar    [string index $l end]
-	set remString   [string range $l 0 end-1]
-	if { $lastChar == "" } { set newChar "A" } else { set newChar [::IRCServices::nextLetter $lastChar]  }
-	lappend newCharArray [::IRCServices::unshift $newChar]
-	if { $lastChar == "Z" } { return [::IRCServices::incrementChar $remString] }
-	set batchString "$remString[lreverse $newCharArray]"
-	set newCharArray [list]
-	return [join $batchString ""]
-}
-# ::IRCServices::config --
-#
-# Set global configuration options.
-#
-# Arguments:
-#
-# key	name of the configuration option to change.
-#
-# value	value of the configuration option.
+	if { [file exists ${DIR(CUR)}/TCL-ZCT/ZCT.tcl] } { catch { source ${DIR(CUR)}/TCL-ZCT/ZCT.tcl } }
+	if { [catch { package require ZCT ${pkg(need_zct)} } err] } {
+		die "\[${pkg(name)} - erreur\] Nécessite ld package ZCT ${pkg(need_zct)} (ou plus) pour fonctionner, Télécharger sur 'https://github.com/ZarTek-Creole/TCL-ZCT'. Le chargement du script a été annulé." ;
+	} else { namespace import -force ::ZCT::* }
+	pkg load Tcl ${pkg(need_tcl)} ${pkg(name)}
+	pkg load logger ${pkg(need_logger)} ${pkg(name)}
+}	
 
 proc ::IRCServices::config { args } {
 	variable config
