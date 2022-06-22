@@ -34,10 +34,10 @@ namespace eval ::IRCServices {
 	if { [file exists ${DIR(CUR)}/TCL-ZCT/ZCT.tcl] } { catch { source ${DIR(CUR)}/TCL-ZCT/ZCT.tcl } }
 	if { [catch { package require ZCT ${pkg(need_zct)} } err] } {
 		die "\[${pkg(name)} - erreur\] Nécessite ld package ZCT ${pkg(need_zct)} (ou plus) pour fonctionner, Télécharger sur 'https://github.com/ZarTek-Creole/TCL-ZCT'. Le chargement du script a été annulé." ;
-		} else { namespace import -force ::ZCT::* }
-		pkg load Tcl ${pkg(need_tcl)} ${pkg(name)}
-		pkg load logger ${pkg(need_logger)} ${pkg(name)}
-	}
+	} else { namespace import -force ::ZCT::* }
+	pkg load Tcl ${pkg(need_tcl)} ${pkg(name)}
+	pkg load logger ${pkg(need_logger)} ${pkg(name)}
+}	
 
 	proc ::IRCServices::nextLetter  { char } {
 		if { ${char} == "Z" } { set char "A" }
