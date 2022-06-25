@@ -27,7 +27,7 @@ namespace eval ::IRCServices {
 	}
 	if { [file exists ${DIR(CUR)}/TCL-ZCT/ZCT.tcl] } { catch { source ${DIR(CUR)}/TCL-ZCT/ZCT.tcl } }
 	if { [catch { package require ZCT ${PKG(need_zct)} } err] } {
-		die "\[${PKG(name)} - erreur\] Nécessite ld package ZCT ${PKG(need_zct)} (ou plus) pour fonctionner, Télécharger sur 'https://github.com/ZarTek-Creole/TCL-ZCT'. Le chargement du script a été annulé." ;
+		die "\[${PKG(name)} - erreur\] Nécessite le package ZCT ${PKG(need_zct)} (ou plus) pour fonctionner, Télécharger sur 'https://github.com/ZarTek-Creole/TCL-ZCT'.\nLe chargement du script a été annulé." ;
 	} else { namespace import -force ::ZCT::* }
 	pkg load Tcl ${PKG(need_tcl)} ${PKG(name)}
 	pkg load logger ${PKG(need_logger)} ${PKG(name)}
