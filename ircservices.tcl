@@ -9,7 +9,7 @@ namespace eval ::IRCServices {
 	variable DIR
 	set DIR(CUR)			[file dirname [file dirname [file normalize [file join [info script] ...]]]]
 	array set PKG {
-		"version"			"0.0.5"
+		"version"			"0.0.7"
 		"need_tcl"			"8.6"
 		"need_tls"			"1.7.16"
 		"need_logger"		"0.9.4"
@@ -47,8 +47,11 @@ proc ::IRCServices::config { args } {
 	set key		[lindex ${args} 0]
 	set value	[lindex ${args} 1]
 	foreach ns [namespace children] {
-		if { [info exists config(${key})] && [info exists ${ns}::config(${key})] \
-			&& [set ${ns}::config(${key})] == $config(${key})} {
+		if {
+			[info exists config(${key})]									&& \
+			[info exists ${ns}::config(${key})] 							&& \
+			[set ${ns}::config(${key})] == $config(${key})
+		} {
 				${ns}::cmd-config ${key} ${value}
 		}
 	}
@@ -126,7 +129,10 @@ proc ::IRCServices::connection { args } {
 		array set linedata	{}
 		set UID_LAST_INSERT	{}
 		array set config	[array get ::IRCServices::config]
-		if { ${config(logger)} || ${config(debug)} } {
+		if { 
+			${config(logger)}												|| \
+			${config(debug)}
+		} {
 			variable logger
 			set logger [logger::init [namespace tail [namespace current]]]
 			if { !${config(debug)} } { ${logger}::disable debug }
@@ -238,7 +244,10 @@ proc ::IRCServices::connection { args } {
 				}
 			}
 			if { ${key} eq "logger" } {
-				if { ${value} && !${config(logger)}} {
+				if {
+					${value}												&& \
+					!${config(logger)}
+				} {
 					set logger [logger::init [namespace tail [namespace current]]]
 				} elseif { [info exists logger] } {
 					${logger}::delete
@@ -528,7 +537,7 @@ proc ::IRCServices::connection { args } {
 
 					# eventexists --
 
-					# Return a boolean value indicating if there is a handler
+					# Return a boolean value indicating i[listf there is a handler
 					# registered for the event.
 
 					# Arguments:
@@ -680,7 +689,10 @@ proc ::IRCServices::connection { args } {
 				variable [namespace current]::UID_DB
 				array set linedata	{}
 				set line "eof"
-				if { [eof ${sock}] || [catch {gets ${sock} } line] } {
+				if {
+					[eof ${sock}] 											|| \
+					[catch {gets ${sock} } line]
+				} {
 					close ${sock}
 					set sock		{}
 					cmd-log error "Error receiving from network: ${line}"
