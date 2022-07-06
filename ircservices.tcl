@@ -13,7 +13,7 @@ namespace eval ::IRCServices {
 		"need_tcl"			"8.6"
 		"need_tls"			"1.7.16"
 		"need_logger"		"0.9.4"
-		"need_zct"			"0.0.1"
+		"need_zct"			"0.0.4"
 		"name"				"package IRCServices"
 	}
 	variable conn			0
@@ -702,8 +702,9 @@ proc ::IRCServices::connection { args } {
 					die "Error IRCServices: perte de la connexion au serveur"
 					return
 				}
-				set line [string map { "\{" "\\\{" "\}" "\\\}"} ${line}]
+				set line [string map { "\{" "\\\{" "\}" "\\\}" "\"" "\\\"" } ${line}]
 				cmd-log debug "Recieved: ${line}"
+				puts ${line}
 				if { [string match -nocase "error*" [lindex ${line} 0]] } { GetError ${line} }
 				if { [set pos [string first " :" ${line}]] > -1 } {
 					set header				[string range ${line} 0 [expr {${pos} - 1}]]
