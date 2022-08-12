@@ -13,7 +13,7 @@ namespace eval ::IRCServices {
 		"need_tcl"			"8.6"
 		"need_tls"			"1.7.16"
 		"need_logger"		"0.9.4"
-		"need_zct"			"0.0.4"
+		"need_zct"			"0.0.10"
 		"name"				"package IRCServices"
 	}
 	variable conn			0
