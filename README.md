@@ -8,9 +8,6 @@ Package IRC Services
 
 IRCServices creer une interface en TCL et la connexion d'un Service à un IRCD (comme anope).
 
-# !!! VERSION ALPHA !!!
-Developper et tester sur unrealircd v5+
-
 Merci d'etre indulgent et repport bugs, idées, etc sur 
 * [Creer un ticket](github.com/ZarTek-Creole/TCL-PKG-IRCServices/issues/new)
 * [Site web: IRCServices](github.com/ZarTek-Creole/TCL-PKG-IRCServices)
@@ -21,12 +18,12 @@ Merci d'etre indulgent et repport bugs, idées, etc sur
 # Téléchargement
 ## Avec git (conseillé):
 
-`git clone --recurse-submodules github.com/ZarTek-Creole/TCL-PKG-IRCServices.git /path/to/install`
+`git clone  https://github.com/ZarTek-Creole/TCL-PKG-IRCServices.git /path/to/install`
 
 ## Avec wget :
 
 ```bash
-wget github.com/ZarTek-Creole/TCL-PKG-IRCServices/archive/refs/heads/main.zip -O /path/to/install/TCL-PKG-IRCServices.zip
+wget https://github.com/ZarTek-Creole/TCL-PKG-IRCServices/archive/refs/heads/main.zip -O /path/to/install/TCL-PKG-IRCServices.zip
 unzip -x TCL-PKG-IRCServices.zip
 rm TCL-PKG-IRCServices.zip
 ```

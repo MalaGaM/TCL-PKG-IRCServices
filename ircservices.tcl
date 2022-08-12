@@ -31,7 +31,8 @@ namespace eval ::IRCServices {
 	} else { namespace import -force ::ZCT::* }
 	pkg load Tcl ${PKG(need_tcl)} ${PKG(name)}
 	pkg load logger ${PKG(need_logger)} ${PKG(name)}
-}	
+}
+
 
 proc ::IRCServices::config { args } {
 	variable config
@@ -309,7 +310,7 @@ proc ::IRCServices::connection { args } {
 			send "PRIVMSG ${target} :\001${line}\001"
 		}
 
-		proc cmd-quit { {msg {tcl irc services module - github.com/ZarTek-Creole/TCL-PKG-IRCServices}} } {
+		proc cmd-quit { {msg {tcl irc services module - https://github.com/ZarTek-Creole/TCL-PKG-IRCServices}} } {
 			send "QUIT :${msg}"
 		}
 
