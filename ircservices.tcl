@@ -33,6 +33,31 @@ namespace eval ::IRCServices {
 	pkg load logger ${PKG(need_logger)} ${PKG(name)}
 }
 
+proc ::IRCServices::nextLetter  { char } {
+	if { $char == "Z" } { set char "A" }
+	scan $char %c i;
+	set ALPHA_NEW [format %c [expr $i+1]]
+	return $ALPHA_NEW
+}
+proc ::IRCServices::unshift { words } {
+	set RES ""
+	for {set i [string length $words] } {0 < $i} {set i [expr $i-1]} { 
+		set RES "$RES[string index $words [expr $i-1]]"
+	}
+	return $RES
+}
+proc ::IRCServices::incrementChar { l } {
+	global newCharArray
+	set l [string toupper $l]
+	set lastChar    [string index $l end]
+	set remString   [string range $l 0 end-1]
+	if { $lastChar == "" } { set newChar "A" } else { set newChar [::IRCServices::nextLetter $lastChar]  }
+	lappend newCharArray [::IRCServices::unshift $newChar]
+	if { $lastChar == "Z" } { return [::IRCServices::incrementChar $remString] } 
+	set batchString "$remString[lreverse $newCharArray]"
+	set newCharArray [list]
+	return [join $batchString ""]
+}
 
 proc ::IRCServices::config { args } {
 	variable config
