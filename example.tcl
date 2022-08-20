@@ -2,11 +2,11 @@
 package require IRCServices
 
 set CONNECT_ID [::IRCServices::connection]; # Creer une instance services
-$CONNECT_ID connect 127.0.0.1 +7002 passwordlink 1 eva.info 00C
+$CONNECT_ID connect 127.0.0.1 +7002 passwordlink 1 Extra-Cool.FR 00C
 set BOT_ID [$CONNECT_ID bot]; #Creer une instance bot dans linstance services
 $BOT_ID create ClaraServ services ClaraServ.eggdrop.fr "Visit: https://git.io/JYY9b" +Soiq
 $BOT_ID join #Services
-$BOT_ID registerevent PRIVMSG {
+$BOT_ID eventbind PRIVMSG {
        set cmd         [lindex [msg] 0]
        set data        [lrange [msg] 1 end]
        ##########################

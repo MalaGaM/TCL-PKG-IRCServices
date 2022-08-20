@@ -28,33 +28,33 @@ namespace eval ::IRCServices {
 	if { [file exists ${DIR(CUR)}/TCL-ZCT/ZCT.tcl] } { catch { source ${DIR(CUR)}/TCL-ZCT/ZCT.tcl } }
 	if { [catch { package require ZCT ${PKG(need_zct)} } err] } {
 		die "\[${PKG(name)} - erreur\] Nécessite le package ZCT ${PKG(need_zct)} (ou plus) pour fonctionner, Télécharger sur 'https://github.com/ZarTek-Creole/TCL-ZCT'.\nLe chargement du script a été annulé." ;
-	} else { namespace import -force ::ZCT::* }
-	pkg load Tcl ${PKG(need_tcl)} ${PKG(name)}
-	pkg load logger ${PKG(need_logger)} ${PKG(name)}
-}
+		} else { namespace import -force ::ZCT::* }
+		pkg load Tcl ${PKG(need_tcl)} ${PKG(name)}
+		pkg load logger ${PKG(need_logger)} ${PKG(name)}
+	}
 
 proc ::IRCServices::nextLetter  { char } {
-	if { $char == "Z" } { set char "A" }
-	scan $char %c i;
-	set ALPHA_NEW [format %c [expr $i+1]]
-	return $ALPHA_NEW
+	if { ${char} == "Z" } { set char "A" }
+	scan ${char} %c i;
+	set ALPHA_NEW [format %c [expr ${i}+1]]
+	return ${ALPHA_NEW}
 }
 proc ::IRCServices::unshift { words } {
 	set RES ""
-	for {set i [string length $words] } {0 < $i} {set i [expr $i-1]} { 
-		set RES "$RES[string index $words [expr $i-1]]"
+	for {set i [string length ${words}] } {0 < ${i}} { set i [expr ${i}-1] } {
+		set RES "${RES}[string index ${words} [expr ${i}-1]]"
 	}
-	return $RES
+	return ${RES}
 }
 proc ::IRCServices::incrementChar { l } {
 	global newCharArray
-	set l [string toupper $l]
-	set lastChar    [string index $l end]
-	set remString   [string range $l 0 end-1]
-	if { $lastChar == "" } { set newChar "A" } else { set newChar [::IRCServices::nextLetter $lastChar]  }
-	lappend newCharArray [::IRCServices::unshift $newChar]
-	if { $lastChar == "Z" } { return [::IRCServices::incrementChar $remString] } 
-	set batchString "$remString[lreverse $newCharArray]"
+	set l 			[string toupper ${l}]
+	set lastChar    [string index ${l} end]
+	set remString   [string range ${l} 0 end-1]
+	if { ${lastChar} == "" } { set newChar "A" } else { set newChar [::IRCServices::nextLetter ${lastChar}]  }
+	lappend newCharArray [::IRCServices::unshift ${newChar}]
+	if { ${lastChar} == "Z" } { return [::IRCServices::incrementChar ${remString}] }
+	set batchString "${remString}[lreverse ${newCharArray}]"
 	set newCharArray [list]
 	return [join $batchString ""]
 }
@@ -75,8 +75,8 @@ proc ::IRCServices::config { args } {
 	foreach ns [namespace children] {
 		if {
 			[info exists config(${key})]									&& \
-			[info exists ${ns}::config(${key})] 							&& \
-			[set ${ns}::config(${key})] == $config(${key})
+				[info exists ${ns}::config(${key})] 							&& \
+				[set ${ns}::config(${key})] == $config(${key})
 		} {
 				${ns}::cmd-config ${key} ${value}
 		}
@@ -84,131 +84,130 @@ proc ::IRCServices::config { args } {
 	set config(${key}) ${value}
 }
 
-# ::IRCServices::connections --
+# ::IRCServices::listnetworks --
 #
-# Return a list of handles to all existing connections
-# Renvoie une liste de descripteurs de toutes les connexions existantes
+	# Return a list of handles to all existing listnetworks
+	# Renvoie une liste de descripteurs de toutes les connexions existantes
 
-proc ::IRCServices::connections { } {
-	set r {}
-	foreach ns [namespace children] {
-		lappend r ${ns}::network
+	proc ::IRCServices::listnetworks { } {
+		set r {}
+		foreach ns [namespace children] {
+			lappend r ${ns}::network
+		}
+		return ${r}
 	}
-	return ${r}
-}
 
 # ::IRCServices::reload --
 #
-# Reload this file, and merge the current connections into
-# the new one.
+	# Reload this file, and merge the current listnetworks into
+	# the new one.
 
-proc ::IRCServices::reload { } {
-	variable conn
-	set oldconn ${conn}
-	namespace eval :: {
-		source [set ::IRCServices::IRCServicestclfile]
-	}
-	foreach ns [namespace children] {
-		foreach var {sock logger host port} {
-			set ${var} [set ${ns}::${var}]
+	proc ::IRCServices::reload { } {
+		variable conn
+		set oldconn ${conn}
+		namespace eval :: {
+			source [set ::IRCServices::IRCServicestclfile]
 		}
-		array set dispatch	[array get ${ns}::dispatch]
-		array set config	[array get ${ns}::config]
-		# make sure our new connection uses the same namespace
-		set conn	[string range ${ns} 10 end]
-		::IRCServices::connection
-		foreach var {sock logger host port} {
-			set ${ns}::${var} [set ${var}]
+		foreach ns [namespace children] {
+			foreach var {sock logger host port} {
+				set ${var} [set ${ns}::${var}]
+			}
+			array set dispatch	[array get ${ns}::dispatch]
+			array set config	[array get ${ns}::config]
+			# make sure our new connection uses the same namespace
+			set conn	[string range ${ns} 10 end]
+			::IRCServices::connection
+			foreach var {sock logger host port} {
+				set ${ns}::${var} [set ${var}]
+			}
+			array set ${ns}::dispatch [array get dispatch]
+			array set ${ns}::config [array get config]
 		}
-		array set ${ns}::dispatch [array get dispatch]
-		array set ${ns}::config [array get config]
+		set conn ${oldconn}
 	}
-	set conn ${oldconn}
-}
 
 # ::IRCServices::connection --
 #
 # Create an IRC connection namespace and associated commands.
 
-proc ::IRCServices::connection { args } {
-	variable conn
-	variable config
-	variable sid ""
-
-
-	# Create a unique namespace of the form irc${conn}::${host}
-
-	set name [format "%s::IRCServices%s" [namespace current] ${conn}]
-
-	namespace eval ${name} {
-		variable sock
-		variable dispatch
-		variable linedata
+	proc ::IRCServices::connection { args } {
+		variable conn
 		variable config
-		variable UID_DB
-		variable [namespace current]::UID_LAST_INSERT
-		variable botn 0
 		variable sid ""
 
-		set sock			{}
-		array set dispatch	{}
-		array set linedata	{}
-		set UID_LAST_INSERT	{}
-		array set config	[array get ::IRCServices::config]
-		if { 
-			${config(logger)}												|| \
-			${config(debug)}
-		} {
-			variable logger
-			set logger [logger::init [namespace tail [namespace current]]]
-			if { !${config(debug)} } { ${logger}::disable debug }
-		}
-		proc TLSSocketCallBack { level args } {
-			set SOCKET_NAME	[lindex ${args} 0]
-			set type		[lindex ${args} 1]
-			set socketid	[lindex ${args} 2]
-			set what		[lrange ${args} 3 end]
-			cmd-log debug "Socket '${SOCKET_NAME}' callback ${type}: ${what}"
-			if { [string match -nocase "*certificate*verify*failed*" ${what}] } {
-				cmd-log error "IRCServices Socket erreur: Vous essayez de vous connecter a un serveur TLS auto-signé. (${what}) [tls::status ${socketid}]"
+
+		# Create a unique namespace of the form irc${conn}::${host}
+
+		set name [format "%s::IRCServices%s" [namespace current] ${conn}]
+
+		namespace eval ${name} {
+			variable sock
+			variable dispatch
+			variable linedata
+			variable config
+			variable UID_DB
+			variable [namespace current]::UID_LAST_INSERT
+			variable botn 0
+			variable sid ""
+
+			set sock			{}
+			array set dispatch	{}
+			array set linedata	{}
+			set UID_LAST_INSERT	{}
+			array set config	[array get ::IRCServices::config]
+			if {
+				${config(logger)}												|| \
+					${config(debug)}
+			} {
+				variable logger
+				set logger [logger::init [namespace tail [namespace current]]]
+				if { !${config(debug)} } { ${logger}::disable debug }
 			}
-			if { [string match -nocase "*wrong*version*number*" ${what}] } {
-				cmd-log error "IRCServices Socket erreur: Vous essayez sans doute de connecter en SSL sur un port Non-SSL. (${what})"
+			proc TLSSocketCallBack { level args } {
+				set SOCKET_NAME	[lindex ${args} 0]
+				set type		[lindex ${args} 1]
+				set socketid	[lindex ${args} 2]
+				set what		[lrange ${args} 3 end]
+				cmd-log debug "Socket '${SOCKET_NAME}' callback ${type}: ${what}"
+				if { [string match -nocase "*certificate*verify*failed*" ${what}] } {
+					cmd-log error "IRCServices Socket erreur: Vous essayez de vous connecter a un serveur TLS auto-signé. (${what}) [tls::status ${socketid}]"
+				}
+				if { [string match -nocase "*wrong*version*number*" ${what}] } {
+					cmd-log error "IRCServices Socket erreur: Vous essayez sans doute de connecter en SSL sur un port Non-SSL. (${what})"
+				}
 			}
-		}
 
 		# send --
 		# send text to the IRC server
 
-		proc send { msg } {
-			variable sock
-			variable dispatch
-			if { ${sock}  eq "" } { return }
-			cmd-log debug "send: '${msg}'"
-			if { [catch {puts ${sock}  ${msg}} err] } {
-				catch { close ${sock}  }
-				set sock {}
-				if { [info exists dispatch(EOF)] } {
-					eval ${dispatch(EOF)}
+			proc send { msg } {
+				variable sock
+				variable dispatch
+				if { ${sock}  eq "" } { return }
+				cmd-log debug "send: '${msg}'"
+				if { [catch { puts ${sock}  ${msg} } err] } {
+					catch { close ${sock}  }
+					set sock {}
+					if { [info exists dispatch(EOF)] } {
+						eval ${dispatch(EOF)}
+					}
+					cmd-log error "Error in send: ${err}"
 				}
-				cmd-log error "Error in send: ${err}"
 			}
-		}
 
 		proc UID_GET { user } {
-			variable config
-			variable [namespace current]::UID_DB
-			variable [namespace current]::UID_LAST_INSERT
-			variable sid
-			if { [UID_EXIST ${user}] } {
-				return "$UID_DB([string toupper ${user}])"
-			} else {
-				if { ${UID_LAST_INSERT} == "" } {
-					set UID_LAST_INSERT		"${sid}AAAAAA"
-					return ${UID_LAST_INSERT}
-				}
-				set UID_NOW							[::IRCServices::incrementChar ${UID_LAST_INSERT}]
-				set UID_LAST_INSERT					${UID_NOW}
+				variable [namespace current]::UID_DB
+				variable [namespace current]::UID_LAST_INSERT
+				variable serverinfo
+				if { [UID_EXIST ${user}] } {
+					return "$UID_DB([string toupper ${user}])"
+				} else {
+					if { ${UID_LAST_INSERT} == "" } {
+						set UID_LAST_INSERT		"${serverinfo(ID)}AAAAAA"
+						return ${UID_LAST_INSERT}
+					}
+				set UID_NOW								[::IRCServices::incrementChar ${UID_LAST_INSERT}]
+				set UID_LAST_INSERT						${UID_NOW}
 				set UID_DB([string toupper ${user}])	${UID_NOW}
 				return ${UID_NOW}
 			}
@@ -230,6 +229,14 @@ proc ::IRCServices::connection { args } {
 				return 0
 			}
 		}
+		proc UID_PREFIX_RANDOM { } {
+			# Pas de 0 ni de 1 car, trop probable de tombé sur un sid déjà utiliser
+			set CHAR_LIST   {ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789}
+			set LENGTH      [string length ${CHAR_LIST}]
+			set CHAR_WIN  	[expr int(rand()*(${LENGTH}+1))]
+			return          "00[string index ${CHAR_LIST} ${CHAR_WIN}]"
+
+		}
 
 		#########################################################
 		# Implemented user-side commands, meaning that these commands
@@ -237,51 +244,51 @@ proc ::IRCServices::connection { args } {
 		#########################################################
 
 
-		# cmd-config --
-		#
-		# Set or return per-connection configuration options.
-		#
-		# Arguments:
-		#
-		# key	name of the configuration option to change.
-		#
-		# value	value (optional) of the configuration option.
+			# cmd-config --
+			#
+			# Set or return per-connection configuration options.
+			#
+			# Arguments:
+			#
+			# key	name of the configuration option to change.
+			#
+			# value	value (optional) of the configuration option.
 
-		proc cmd-config { args } {
-			variable config
-			variable logger
+			proc cmd-config { args } {
+				variable config
+				variable logger
 
-			if { [llength ${args}] == 0 } {
-				return [array get config]
-			} elseif { [llength ${args}] == 1 } {
-				set key [lindex ${args} 0]
-				return $config(${key})
-			} elseif { [llength ${args}] > 2 } {
-				error "wrong # args: should be \"config key ?val?\""
-			}
-			set key		[lindex ${args} 0]
-			set value	[lindex ${args} 1]
-			if { ${key} eq "debug" } {
-				if {${value}} {
-					if { !${config(logger)} } { cmd-config logger 1 }
-					${logger}::enable debug
-				} elseif { [info exists logger] } {
-					${logger}::disable debug
+				if { [llength ${args}] == 0 } {
+					return [array get config]
+				} elseif { [llength ${args}] == 1 } {
+					set key [lindex ${args} 0]
+					return $config(${key})
+				} elseif { [llength ${args}] > 2 } {
+					error "wrong # args: should be \"config key ?val?\""
 				}
-			}
-			if { ${key} eq "logger" } {
-				if {
-					${value}												&& \
-					!${config(logger)}
-				} {
-					set logger [logger::init [namespace tail [namespace current]]]
-				} elseif { [info exists logger] } {
-					${logger}::delete
-					unset logger
+				set key		[lindex ${args} 0]
+				set value	[lindex ${args} 1]
+				if { ${key} eq "debug" } {
+					if {${value}} {
+						if { !${config(logger)} } { cmd-config logger 1 }
+						${logger}::enable debug
+					} elseif { [info exists logger] } {
+						${logger}::disable debug
+					}
 				}
+				if { ${key} eq "logger" } {
+					if {
+						${value}												&& \
+							!${config(logger)}
+					} {
+						set logger [logger::init [namespace tail [namespace current]]]
+					} elseif { [info exists logger] } {
+						${logger}::delete
+						unset logger
+					}
+				}
+				set config(${key}) ${value}
 			}
-			set config(${key}) ${value}
-		}
 
 		proc cmd-log {level text} {
 			variable logger
@@ -300,13 +307,13 @@ proc ::IRCServices::connection { args } {
 		#
 		# destroys the current connection and its namespace
 
-		proc cmd-destroy { } {
-			variable logger
-			variable sock
-			if { [info exists logger] } { ${logger}::delete }
-			catch { close ${sock} }
-			namespace delete [namespace current]
-		}
+			proc cmd-destroy { } {
+				variable logger
+				variable sock
+				if { [info exists logger] } { ${logger}::delete }
+				catch { close ${sock} }
+				namespace delete [namespace current]
+			}
 
 		proc cmd-connected { } {
 			variable sock
@@ -404,54 +411,63 @@ proc ::IRCServices::connection { args } {
 		# Connect --
 		# Create the actual tcp connection.
 
-		proc cmd-connect { hostname port password {ts6 1} {name eva.info} {id 00R}} {
-			variable sock
-			variable host
-			variable s_port
-			variable pass
-			variable sname
-			variable sid
-			variable ::IRCServices::PKG
+			proc cmd-connect { Server_HostName Server_Port Server_Password { Server_Protocol 1 } { Server_Name Extra-Cool.FR } { Server_ID "" } } {
+				variable serverinfo
+				variable sock
+				variable ::IRCServices::PKG
 
-			set host	${hostname}
-			set s_port	${port}
-			set pass	${password}
-			set sname	${name}
-			set sid		${id}
+				set serverinfo(hostname)	${Server_HostName}
+				set serverinfo(password)	${Server_Password}
+				set serverinfo(name)		${Server_Name}
 
-			if { [string range ${s_port} 0 0] == "+" } {
-				set secure	1;
-				set port	[string range ${s_port} 1 end]
+			if { ${Server_ID} == "" } {
+					set serverinfo(ID)		[UID_PREFIX_RANDOM]
 			} else {
-				set secure	0;
-				set port	${s_port}
-			}
-			if { ${secure} == 1 } {
-				if { [catch { package require tls ${PKG(need_tls)} }] } {
-					die "\[${PKG(name)} - Erreur\] Nécessite le package tls ${PKG(need_tls)} (ou plus) pour fonctionner, Télécharger sur 'https://core.tcl-lang.org/tcltls/index'. Le chargement du package a été annulé." ;
+					set serverinfo(ID)		${Server_ID}
 				}
-				set socket_binary "::tls::socket -require 0 -request 0 -command \"[namespace current]::TLSSocketCallBack ${sock}\""
+
+			if { [string range ${Server_Port} 0 0] == "+" } {
+				set serverinfo(ssl)		1;
+				set serverinfo(port)	[string range ${Server_Port} 1 end]
+				# Necesite le package tls, tentative de chargment de celui-ci via la fct de ZCT
+				::ZCT::pkg::load tls ${PKG(need_tls)} ${PKG(name)}
+				set socket_binary 	"::tls::socket 								\
+					-require 0 													\
+					-request 0 													\
+					-command \"[namespace current]::TLSSocketCallBack ${sock}\" \
+					";
 			} else {
-				set socket_binary ::socket
-			}
+					set serverinfo(ssl)		0;
+					set serverinfo(port)	${Server_Port}
+					set socket_binary 		"::socket"
+				}
+
 			if { ${sock} eq "" } {
-				if { [catch {
-					set sock [{*}${socket_binary} ${host} ${port}]
-					} err] } { die "\[${PKG(name)} - Erreur\] Impossible de ce connecter sur ${host}:${port}: ${err}" }
+					if {
+						[catch {
+							set sock [{*}${socket_binary} ${Server_HostName} ${Server_Port}]
+						} err]
+					} {
+						die "\[${PKG(name)} - Erreur\] Impossible de ce connecter sur ${Server_HostName}:${Server_Port}: ${err}"
+					}
 					fconfigure ${sock}  -translation crlf -buffering line
-					fileevent ${sock} readable [namespace current]::GetEvent
-					if { ${ts6} } {
-						send "PASS :${pass}"
+					fileevent ${sock} readable [namespace current]::GetLine
+
+
+					# https://www.unrealircd.org/docs/Server_protocol
+					if { ${Server_Protocol} } {
+						send "PASS :${Server_Password}"
+						# https://www.unrealircd.org/docs/Server_protocol:PROTOCTL_commandµ
 						send "PROTOCTL NICKv2 VHP UMODE2 NICKIP SJOIN SJOIN2 SJ3 NOQUIT TKLEXT MLOCK SID"
-						send "PROTOCTL EAUTH=${sname},,,IRCService-${PKG(version)}"
-						send "PROTOCTL SID=${sid}"
-						send ":${sid} SERVER ${sname} 1 :Services for IRC Networks"
+						# EAUTH=my.server.name[,protocolversion[,versionflags,fullversiontext]]
+						send "PROTOCTL EAUTH=${Server_Name},${PKG(version)},IRCService,IRCService-${PKG(version)}"
+						send "PROTOCTL SID=${serverinfo(ID)}"
+						send ":${serverinfo(ID)} SERVER ${Server_Name} 1 :TCL IRCServices for IRC Networks"
 						send "EOS"
 					} else {
-						send "PASS ${pass}"
-						send "SERVER ${sname} 1 :Services for IRC Networks"
+						send "PASS ${Server_Password}"
+						send "SERVER ${Server_Name} 1 :Services for IRC Networks"
 						send "EOS"
-						#	send ":${sname} NICK $config(service_nick) 1 [clock seconds] $config(service_user) $config(service_host) ${sname} :$config(service_gecos)"
 					}
 				}
 				return 1
@@ -530,48 +546,35 @@ proc ::IRCServices::connection { args } {
 						variable bid
 						[namespace parent]::send ":${bid} ${line}"
 					}
-					# registerevent --
+				# eventbind --
 
-					# Register an event in the dispatch table.
 
-					# Arguments:
-					# evnt: name of event as sent by IRC server.
-					# cmd: proc to register as the event handler
-
-					proc cmd-registerevent { evnt cmd } {
+					proc cmd-eventbind { event cmd } {
 						variable dispatch
-						set dispatch(${evnt}) ${cmd}
+						set dispatch(${event}) ${cmd}
 						if { ${cmd} eq "" } {
-							unset dispatch(${evnt})
+							unset dispatch(${event})
 						}
 					}
 
-					# getevent --
+				# eventget --
 
-					# Return the currently registered handler for the event.
-
-					# Arguments:
-					# evnt: name of event as sent by IRC server.
-
-					proc cmd-getevent { evnt } {
+					proc cmd-eventget { {event ""} } {
 						variable dispatch
-						if { [info exists dispatch(${evnt})] } {
-							return $dispatch($evnt)
+						if { ${event} == "" } {
+							return [array names dispatch];
+						}
+						if { [info exists dispatch(${event})] } {
+							return $dispatch(${event})
 						}
 						return {}
 					}
 
 					# eventexists --
 
-					# Return a boolean value indicating i[listf there is a handler
-					# registered for the event.
-
-					# Arguments:
-					# evnt: name of event as sent by IRC server.
-
-					proc cmd-eventexists { evnt } {
+					proc cmd-eventexists { event } {
 						variable dispatch
-						return [info exists dispatch(${evnt})]
+						return [info exists dispatch(${event})]
 					}
 					proc bot { cmd args } {
 						if { [info proc [namespace current]::cmd-${cmd}] == "" } {
@@ -612,20 +615,10 @@ proc ::IRCServices::connection { args } {
 				return ${linedata(action)}
 			}
 
-			# msg --
-
-			# The last argument of the line, after the last ':'.
-
 			proc msg { } {
 				variable linedata
 				return ${linedata(msg)}
 			}
-
-			# who --
-
-			# Who performed the action.  If the command is called as [who address],
-			# it returns the information in the form
-			# nick!ident@host.domain.net
 
 			proc who { {address 0} } {
 				variable linedata
@@ -650,10 +643,7 @@ proc ::IRCServices::connection { args } {
 			proc bid { } {
 				variable linedata
 				return ${linedata(bid)}
-			}
-			# target --
-
-			# To whom was this action done.
+		}
 
 			proc target { } {
 				variable linedata
@@ -665,9 +655,6 @@ proc ::IRCServices::connection { args } {
 				return ${linedata(target2)}
 			}
 
-			# additional --
-
-			# Returns any additional header elements beyond the target as a list.
 
 			proc additional { } {
 				variable linedata
@@ -678,10 +665,6 @@ proc ::IRCServices::connection { args } {
 				variable linedata
 				return ${linedata(rawline)}
 			}
-
-			# header --
-
-			# Returns the entire header in list format.
 
 			proc header { } {
 				variable linedata
@@ -697,18 +680,19 @@ proc ::IRCServices::connection { args } {
 					if {[string match -nocase "*Authentication*failed*" ${raison}]} {
 						set DIE	"Authentification du service '${hostname}' à échoué (mot de passe?)"
 					} elseif {[string match -nocase "*SID*collision*" ${raison}]} {
-						set DIE	"Le SID (Server ID) est déjà utiliser. Choisissez un autre."
+						variable serverinfo
+						set DIE	[format "Le 'SID' (Server ID:%s) est déjà utiliser. Choisissez un autre." ${serverinfo(ID)}]
 					}
 
 				}
-				if { ${DIE} != ""} { die "\[Error - IRCServices\] ${DIE}" }
+			if { ${DIE} != "" } { die "\[Error - IRCServices\] ${DIE}" }
 
 			}
 
-			# GetEvent --
+		# GetLine --
 
 			# Get a line from the server and dispatch it.
-			proc GetEvent { } {
+			proc GetLine { } {
 				variable linedata
 				variable sock
 				variable dispatch
@@ -717,7 +701,7 @@ proc ::IRCServices::connection { args } {
 				set line "eof"
 				if {
 					[eof ${sock}] 											|| \
-					[catch {gets ${sock} } line]
+					[catch { gets ${sock} } line]
 				} {
 					close ${sock}
 					set sock		{}
@@ -730,7 +714,6 @@ proc ::IRCServices::connection { args } {
 				}
 				set line [string map { "\{" "\\\{" "\}" "\\\}" "\"" "\\\"" } ${line}]
 				cmd-log debug "Recieved: ${line}"
-				puts ${line}
 				if { [string match -nocase "error*" [lindex ${line} 0]] } { GetError ${line} }
 				if { [set pos [string first " :" ${line}]] > -1 } {
 					set header				[string range ${line} 0 [expr {${pos} - 1}]]
@@ -776,41 +759,44 @@ proc ::IRCServices::connection { args } {
 				} else {
 					eval ${dispatch(defaultevent)}
 				}
+				if { [action] == "SLOG" } {
+					die ${linedata(msg)}
+				}
 				if { [action] == "UID" } {
 					# PROTOCOL TS6 : enregistre des ID<->nick en DB
-					set uid				[string toupper [lindex [additional] 4]]
+					set uid									[string toupper [lindex [additional] 4]]
 					set UID_DB([string toupper [target]])	${uid}
 					set UID_DB([string toupper ${uid}])		[target]
 				}
 			}
 
-			# registerevent --
+		# eventbind --
 
 			# Register an event in the dispatch table.
 
 			# Arguments:
-			# evnt: name of event as sent by IRC server.
+			# event: name of event as sent by IRC server.
 			# cmd: proc to register as the event handler
 
-			proc cmd-registerevent { evnt cmd } {
+			proc cmd-eventbind { event cmd } {
 				variable dispatch
-				set dispatch(${evnt}) ${cmd}
+				set dispatch(${event}) ${cmd}
 				if { ${cmd} eq "" } {
-					unset dispatch(${evnt})
+					unset dispatch(${event})
 				}
 			}
 
-			# getevent --
+		# eventget --
 
 			# Return the currently registered handler for the event.
 
 			# Arguments:
-			# evnt: name of event as sent by IRC server.
+			# event: name of event as sent by IRC server.
 
-			proc cmd-getevent { evnt } {
+			proc cmd-eventget { event } {
 				variable dispatch
-				if { [info exists dispatch(${evnt})] } {
-					return $dispatch(${evnt})
+				if { [info exists dispatch(${event})] } {
+					return $dispatch(${event})
 				}
 				return {}
 			}
@@ -821,11 +807,11 @@ proc ::IRCServices::connection { args } {
 			# registered for the event.
 
 			# Arguments:
-			# evnt: name of event as sent by IRC server.
+			# event: name of event as sent by IRC server.
 
-			proc cmd-eventexists { evnt } {
+			proc cmd-eventexists { event } {
 				variable dispatch
-				return [info exists dispatch(${evnt})]
+				return [info exists dispatch(${event})]
 			}
 
 			# network --
@@ -846,10 +832,10 @@ proc ::IRCServices::connection { args } {
 
 			# Create default handlers.
 
-			set dispatch(PING) {network send "PONG :[msg]"}
-			set dispatch(defaultevent) #
-			set dispatch(defaultcmd) #
-			set dispatch(defaultnumeric) #
+			set dispatch(PING)				{network send "PONG :[msg]"}
+			set dispatch(defaultevent)		#
+			set dispatch(defaultcmd)		#
+			set dispatch(defaultnumeric)	#
 		}
 
 
