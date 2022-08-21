@@ -1,0 +1,685 @@
+<html>
+<head><title>ircservices.tcl annotations</title></head>
+<body bgcolor="#ffffff">
+<font size="-2">
+Index by:  <a href="index_main.html#ircservices.tcl">file name</a> |
+<a href="index_main.html#byprocname">procedure name</a> |
+<a href="index_main.html#bycall">procedure call</a> |
+<a href="index_annot_full.html">annotation</a>
+</font>
+<hr>
+<h2><a href="ircservices.tcl.html">ircservices.tcl</a> Annotations</h2>
+<hr>
+
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tr bgcolor="#ccccff">
+<!-- -------------------- PROCEDURE SUMMARY -------------------- -->
+<td><font size="+2"><strong><a name="proc_summary">Procedure Summary</a></strong></font></td>
+</tr>
+<tr><td><code><a href="#::IRCServices::config">::IRCServices::config</a> { args }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#::IRCServices::connection">::IRCServices::connection</a> { args }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#::IRCServices::incrementChar">::IRCServices::incrementChar</a> { l }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#::IRCServices::listnetworks">::IRCServices::listnetworks</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#::IRCServices::nextLetter">::IRCServices::nextLetter</a> { char }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#::IRCServices::reload">::IRCServices::reload</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#::IRCServices::unshift">::IRCServices::unshift</a> { words }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#action">action</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#additional">additional</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#bid">bid</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#bot">bot</a> { cmd args }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-bot">cmd-bot</a> { args }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-config">cmd-config</a> { args }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-connect">cmd-connect</a> { Server_HostName Server_Port Server_Password {Server_Protocol 1} {Server_Name Extra-Cool.FR} {Server_ID {}} }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-connected">cmd-connected</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-create">cmd-create</a> { botnick botident bothost {botgecos {Package TCL IRCServices}} {botmodes +qioS} }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-ctcp">cmd-ctcp</a> { target line }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-destroy">cmd-destroy</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-disconnect">cmd-disconnect</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-eventbind">cmd-eventbind</a> { event cmd }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-eventbind">cmd-eventbind</a> { event cmd }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-eventexists">cmd-eventexists</a> { event }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-eventexists">cmd-eventexists</a> { event }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-eventget">cmd-eventget</a> { event }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-eventget">cmd-eventget</a> { event }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-invite">cmd-invite</a> { chan target }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-join">cmd-join</a> { chan }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-kick">cmd-kick</a> { chan target {msg {}} }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-log">cmd-log</a> { level text }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-logname">cmd-logname</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-mesend">cmd-mesend</a> { line }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-mode">cmd-mode</a> { DEST {MODE {}} {CIBLE {}} }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-mode">cmd-mode</a> { DEST {MODE {}} {CIBLE {}} }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-notice">cmd-notice</a> { target msg }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-notice">cmd-notice</a> { target msg }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-part">cmd-part</a> { chan {msg {}} }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-peername">cmd-peername</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-ping">cmd-ping</a> { target }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-privmsg">cmd-privmsg</a> { target msg }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-quit">cmd-quit</a> { {msg {tcl irc services module - https://github.com/ZarTek-Creole/TCL-PKG-IRCServices}} }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-send">cmd-send</a> { line }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-send">cmd-send</a> { line }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-serverping">cmd-serverping</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-socket">cmd-socket</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-sockname">cmd-sockname</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-topic">cmd-topic</a> { chan msg }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-user">cmd-user</a> { username hostname servername {userinfo {}} }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#cmd-vusercreate">cmd-vusercreate</a> { usernick username {userhost localhost} {usergecos {Package TCL IRCServices}} {usermodes +qioS} }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#GetError">GetError</a> { Message }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#GetLine">GetLine</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get a line from the server and dispatch</td></tr>
+<tr><td><code><a href="#header">header</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#msg">msg</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#network">network</a> { cmd args }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#rawline">rawline</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#send">send</a> { msg }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#sid">sid</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#target">target</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#target2">target2</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#TLSSocketCallBack">TLSSocketCallBack</a> { level args }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#UID_CONVERT">UID_CONVERT</a> { ID }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#UID_EXIST">UID_EXIST</a> { CIBLE }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#UID_GET">UID_GET</a> { user }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#UID_PREFIX_RANDOM">UID_PREFIX_RANDOM</a> {  }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#who">who</a> { {address 0} }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td><code><a href="#who2">who2</a> { {address 0} }</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+</table>
+<p>
+<!-- -------------------- PROCEDURE DETAIL -------------------- -->
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tr bgcolor="#ccccff">
+<td colspan=1><font size="+2"><strong><a name="proc_detail">Procedure Detail</a></strong></font></td>
+</tr>
+</table>
+<h3><a name="::IRCServices::config">::IRCServices::config</a></h3>
+<pre>proc ::IRCServices::config { args }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#::IRCServices::config_62">ircservices.tcl, line 62</a>
+</dl></dl>
+
+<hr>
+<h3><a name="::IRCServices::connection">::IRCServices::connection</a></h3>
+<pre>proc ::IRCServices::connection { args }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#::IRCServices::connection_133">ircservices.tcl, line 133</a>
+</dl></dl>
+
+<hr>
+<h3><a name="::IRCServices::incrementChar">::IRCServices::incrementChar</a></h3>
+<pre>proc ::IRCServices::incrementChar { l }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#::IRCServices::incrementChar_49">ircservices.tcl, line 49</a>
+</dl></dl>
+
+<hr>
+<h3><a name="::IRCServices::listnetworks">::IRCServices::listnetworks</a></h3>
+<pre>proc ::IRCServices::listnetworks {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#::IRCServices::listnetworks_92">ircservices.tcl, line 92</a>
+</dl></dl>
+
+<hr>
+<h3><a name="::IRCServices::nextLetter">::IRCServices::nextLetter</a></h3>
+<pre>proc ::IRCServices::nextLetter { char }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#::IRCServices::nextLetter_36">ircservices.tcl, line 36</a>
+</dl></dl>
+
+<hr>
+<h3><a name="::IRCServices::reload">::IRCServices::reload</a></h3>
+<pre>proc ::IRCServices::reload {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#::IRCServices::reload_105">ircservices.tcl, line 105</a>
+</dl></dl>
+
+<hr>
+<h3><a name="::IRCServices::unshift">::IRCServices::unshift</a></h3>
+<pre>proc ::IRCServices::unshift { words }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#::IRCServices::unshift_42">ircservices.tcl, line 42</a>
+</dl></dl>
+
+<hr>
+<h3><a name="action">action</a></h3>
+<pre>proc action {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#action_613">ircservices.tcl, line 613</a>
+</dl></dl>
+
+<hr>
+<h3><a name="additional">additional</a></h3>
+<pre>proc additional {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#additional_659">ircservices.tcl, line 659</a>
+</dl></dl>
+
+<hr>
+<h3><a name="bid">bid</a></h3>
+<pre>proc bid {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#bid_643">ircservices.tcl, line 643</a>
+</dl></dl>
+
+<hr>
+<h3><a name="bot">bot</a></h3>
+<pre>proc bot { cmd args }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#bot_579">ircservices.tcl, line 579</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-bot">cmd-bot</a></h3>
+<pre>proc cmd-bot { args }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-bot_476">ircservices.tcl, line 476</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-config">cmd-config</a></h3>
+<pre>proc cmd-config { args }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-config_257">ircservices.tcl, line 257</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-connect">cmd-connect</a></h3>
+<pre>proc cmd-connect { Server_HostName Server_Port Server_Password {Server_Protocol 1} {Server_Name Extra-Cool.FR} {Server_ID {}} }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-connect_414">ircservices.tcl, line 414</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-connected">cmd-connected</a></h3>
+<pre>proc cmd-connected {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-connected_318">ircservices.tcl, line 318</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-create">cmd-create</a></h3>
+<pre>proc cmd-create { botnick botident bothost {botgecos {Package TCL IRCServices}} {botmodes +qioS} }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-create_498">ircservices.tcl, line 498</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-ctcp">cmd-ctcp</a></h3>
+<pre>proc cmd-ctcp { target line }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-ctcp_341">ircservices.tcl, line 341</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-destroy">cmd-destroy</a></h3>
+<pre>proc cmd-destroy {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-destroy_310">ircservices.tcl, line 310</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-disconnect">cmd-disconnect</a></h3>
+<pre>proc cmd-disconnect {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-disconnect_403">ircservices.tcl, line 403</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-eventbind">cmd-eventbind</a></h3>
+<pre>proc cmd-eventbind { event cmd }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-eventbind_781">ircservices.tcl, line 781</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-eventbind">cmd-eventbind</a></h3>
+<pre>proc cmd-eventbind { event cmd }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-eventbind_781">ircservices.tcl, line 781</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-eventexists">cmd-eventexists</a></h3>
+<pre>proc cmd-eventexists { event }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-eventexists_812">ircservices.tcl, line 812</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-eventexists">cmd-eventexists</a></h3>
+<pre>proc cmd-eventexists { event }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-eventexists_812">ircservices.tcl, line 812</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-eventget">cmd-eventget</a></h3>
+<pre>proc cmd-eventget { event }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-eventget_796">ircservices.tcl, line 796</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-eventget">cmd-eventget</a></h3>
+<pre>proc cmd-eventget { event }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-eventget_796">ircservices.tcl, line 796</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-invite">cmd-invite</a></h3>
+<pre>proc cmd-invite { chan target }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-invite_377">ircservices.tcl, line 377</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-join">cmd-join</a></h3>
+<pre>proc cmd-join { chan }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-join_525">ircservices.tcl, line 525</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-kick">cmd-kick</a></h3>
+<pre>proc cmd-kick { chan target {msg {}} }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-kick_353">ircservices.tcl, line 353</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-log">cmd-log</a></h3>
+<pre>proc cmd-log { level text }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-log_293">ircservices.tcl, line 293</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-logname">cmd-logname</a></h3>
+<pre>proc cmd-logname {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-logname_299">ircservices.tcl, line 299</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-mesend">cmd-mesend</a></h3>
+<pre>proc cmd-mesend { line }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-mesend_545">ircservices.tcl, line 545</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-mode">cmd-mode</a></h3>
+<pre>proc cmd-mode { DEST {MODE {}} {CIBLE {}} }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-mode_538">ircservices.tcl, line 538</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-mode">cmd-mode</a></h3>
+<pre>proc cmd-mode { DEST {MODE {}} {CIBLE {}} }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-mode_538">ircservices.tcl, line 538</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-notice">cmd-notice</a></h3>
+<pre>proc cmd-notice { target msg }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-notice_521">ircservices.tcl, line 521</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-notice">cmd-notice</a></h3>
+<pre>proc cmd-notice { target msg }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-notice_521">ircservices.tcl, line 521</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-part">cmd-part</a></h3>
+<pre>proc cmd-part { chan {msg {}} }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-part_530">ircservices.tcl, line 530</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-peername">cmd-peername</a></h3>
+<pre>proc cmd-peername {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-peername_385">ircservices.tcl, line 385</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-ping">cmd-ping</a></h3>
+<pre>proc cmd-ping { target }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-ping_333">ircservices.tcl, line 333</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-privmsg">cmd-privmsg</a></h3>
+<pre>proc cmd-privmsg { target msg }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-privmsg_517">ircservices.tcl, line 517</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-quit">cmd-quit</a></h3>
+<pre>proc cmd-quit { {msg {tcl irc services module - https://github.com/ZarTek-Creole/TCL-PKG-IRCServices}} }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-quit_345">ircservices.tcl, line 345</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-send">cmd-send</a></h3>
+<pre>proc cmd-send { line }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-send_542">ircservices.tcl, line 542</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-send">cmd-send</a></h3>
+<pre>proc cmd-send { line }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-send_542">ircservices.tcl, line 542</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-serverping">cmd-serverping</a></h3>
+<pre>proc cmd-serverping {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-serverping_337">ircservices.tcl, line 337</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-socket">cmd-socket</a></h3>
+<pre>proc cmd-socket {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-socket_397">ircservices.tcl, line 397</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-sockname">cmd-sockname</a></h3>
+<pre>proc cmd-sockname {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-sockname_391">ircservices.tcl, line 391</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-topic">cmd-topic</a></h3>
+<pre>proc cmd-topic { chan msg }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-topic_362">ircservices.tcl, line 362</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-user">cmd-user</a></h3>
+<pre>proc cmd-user { username hostname servername {userinfo {}} }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-user_324">ircservices.tcl, line 324</a>
+</dl></dl>
+
+<hr>
+<h3><a name="cmd-vusercreate">cmd-vusercreate</a></h3>
+<pre>proc cmd-vusercreate { usernick username {userhost localhost} {usergecos {Package TCL IRCServices}} {usermodes +qioS} }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#cmd-vusercreate_366">ircservices.tcl, line 366</a>
+</dl></dl>
+
+<hr>
+<h3><a name="GetError">GetError</a></h3>
+<pre>proc GetError { Message }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#GetError_675">ircservices.tcl, line 675</a>
+</dl></dl>
+
+<hr>
+<h3><a name="GetLine">GetLine</a></h3>
+<pre>proc GetLine {  }</pre>
+<dl>
+<dd>Get a line from the server and dispatch it.<dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#GetLine_695">ircservices.tcl, line 695</a>
+</dl></dl>
+
+<hr>
+<h3><a name="header">header</a></h3>
+<pre>proc header {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#header_669">ircservices.tcl, line 669</a>
+</dl></dl>
+
+<hr>
+<h3><a name="msg">msg</a></h3>
+<pre>proc msg {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#msg_618">ircservices.tcl, line 618</a>
+</dl></dl>
+
+<hr>
+<h3><a name="network">network</a></h3>
+<pre>proc network { cmd args }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#network_825">ircservices.tcl, line 825</a>
+</dl></dl>
+
+<hr>
+<h3><a name="rawline">rawline</a></h3>
+<pre>proc rawline {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#rawline_664">ircservices.tcl, line 664</a>
+</dl></dl>
+
+<hr>
+<h3><a name="send">send</a></h3>
+<pre>proc send { msg }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#send_183">ircservices.tcl, line 183</a>
+</dl></dl>
+
+<hr>
+<h3><a name="sid">sid</a></h3>
+<pre>proc sid {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#sid_639">ircservices.tcl, line 639</a>
+</dl></dl>
+
+<hr>
+<h3><a name="target">target</a></h3>
+<pre>proc target {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#target_648">ircservices.tcl, line 648</a>
+</dl></dl>
+
+<hr>
+<h3><a name="target2">target2</a></h3>
+<pre>proc target2 {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#target2_653">ircservices.tcl, line 653</a>
+</dl></dl>
+
+<hr>
+<h3><a name="TLSSocketCallBack">TLSSocketCallBack</a></h3>
+<pre>proc TLSSocketCallBack { level args }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#TLSSocketCallBack_166">ircservices.tcl, line 166</a>
+</dl></dl>
+
+<hr>
+<h3><a name="UID_CONVERT">UID_CONVERT</a></h3>
+<pre>proc UID_CONVERT { ID }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#UID_CONVERT_215">ircservices.tcl, line 215</a>
+</dl></dl>
+
+<hr>
+<h3><a name="UID_EXIST">UID_EXIST</a></h3>
+<pre>proc UID_EXIST { CIBLE }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#UID_EXIST_223">ircservices.tcl, line 223</a>
+</dl></dl>
+
+<hr>
+<h3><a name="UID_GET">UID_GET</a></h3>
+<pre>proc UID_GET { user }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#UID_GET_198">ircservices.tcl, line 198</a>
+</dl></dl>
+
+<hr>
+<h3><a name="UID_PREFIX_RANDOM">UID_PREFIX_RANDOM</a></h3>
+<pre>proc UID_PREFIX_RANDOM {  }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#UID_PREFIX_RANDOM_232">ircservices.tcl, line 232</a>
+</dl></dl>
+
+<hr>
+<h3><a name="who">who</a></h3>
+<pre>proc who { {address 0} }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#who_623">ircservices.tcl, line 623</a>
+</dl></dl>
+
+<hr>
+<h3><a name="who2">who2</a></h3>
+<pre>proc who2 { {address 0} }</pre>
+<dl>
+<dd><dl>
+<dt><strong>Defined in:</strong><dd><a href="ircservices.tcl.html#who2_631">ircservices.tcl, line 631</a>
+</dl></dl>
+
+<hr>
+<font size="-2">
+Index by:  <a href="index_main.html#byfilename">file name</a> |
+<a href="index_main.html#byprocname">procedure name</a> |
+<a href="index_main.html#bycall">procedure call</a> |
+<a href="index_annot_full.html">annotation</a><br>
+<cite>Index generated 2022-08-21 at 17:18.</cite>
+</font>
+</body>
+</html>
