@@ -5,9 +5,9 @@
 [cc-by-shield]: https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg
 
 # IRCServices
-> Le Package IRC Services introduction:
+> introduction: 
 > 
-> IRCServices cree une interface en TCL et la connexion d'un Service à un IRCD (comme anope).
+> Le Package IRC Services créé une interface en TCL et la connexion d'un Service à un IRCD (comme anope).
 >
 > Ce package fournit des [Commandes](#commandes) de bas niveau pour gérer le protocole IRC Serveur/service pour une communication multidiffusion immédiate et interactive.
 > 
@@ -17,7 +17,7 @@
 * [Site web: IRCServices](github.com/ZarTek-Creole/TCL-PKG-IRCServices)
 
 # Informations sur la documentation
-> Les informations entre <texte> sont obligatoires et ceux entre [texte] sont facultatives.
+> Les informations entre < texte > sont obligatoires et ceux entre [texte] sont facultatives.
 
 
 # Table des matières
@@ -175,9 +175,9 @@ Un exemple en fichier tcl : [example.tcl](example.tcl)
 # Les commandes IRCServices
 
 ## ::IRCServices::**connection**
-> La commande [[::IRCServices::connection]](#ircservicesconnection) crée une nouvelle instance pour gérer une connexion IRC.
+> La commande [[::IRCServices::connection]](#ircservicesconnection) créée une nouvelle instance pour gérer une connexion IRC.
 > 
-> La création de cet instance IRCServices ne crée pas automatiquement la connexion réseau.
+> La création de cette instance IRCServices ne créée pas automatiquement la connexion réseau.
 > 
 > Il renvoie une nouvelle commande d'espace de noms **::IRCServices::** qui peut être utilisée pour interagir avec la nouvelle connexion IRC.
 > 
@@ -214,18 +214,18 @@ Un exemple en fichier tcl : [example.tcl](example.tcl)
 **net** représente une commande de connexion renvoyée par **[[::irc::connection]](#ircconnection)**.
 
 ### net **eventbind** ?event? ?script?
-> Cree un bind (déclencheur) pour l'événement spécifié.
+> Créé un bind (déclencheur) pour l'événement spécifié.
 > La liste d'event ci-dessous et plusieurs autres événements sont définis.
 > 
-> **defaultcmd** ajoute une commande qui est appelée si aucun autre rappel n'est présent.
+> **defaultcmd** ajoute une commande qui est appelé si aucun autre rappel n'est présent.
 > 
-> EOF est appelé lors de la fermeture voulu ou accidentel de la connexion. 
+> EOF est appelé lors de la fermeture voulue ou accidentelle de la connexion. 
 > 
 > Les événements **defaultcmd**, **defaultnumeric**, **defaultevent** et ***EOF*** sont obligatoires.
 > 
 > Le script est exécuté dans l'espace de noms de connexion (::IRCServices:: ...), qui peut tirer parti de plusieurs commandes (voir Commandes de rappel ci-dessous) pour faciliter l'analyse des données.
 > 
-> Les événements disponibles sont ceux  ci dessous
+> Les événements disponibles sont ceux  ci-dessous
 #### Liste des events
 - PRIVMSG
 - JOIN
@@ -265,8 +265,8 @@ Un exemple en fichier tcl : [example.tcl](example.tcl)
 - SERVER
 
 ### net **eventget** <event> <script>
-> Récupere la valeur de **event**
-> Sans arguments **eventget** affiche la liste des événements
+> Récupére la valeur de **event**
+> Sans argument **eventget** affiche la liste des événements
 > 
 ### net **eventexists** event script
 
@@ -275,20 +275,20 @@ Returns a boolean value indicating the existence of the event handler.
 ### [net](#ircservicesconnection) **connect** <Server_HostName> <[+]Server_Port> <Server_Password> [Server_Protocol] [Server_Name] [Server_ID]
 
 #### Server_HostName
-Informé **Server_HostName** avec le **nom de domaine réele** ou l'**IP** au quel le services doit ce connecter.
+Informer **Server_HostName** avec le **nom de domaine réel** ou l'**IP** auquel le service doit se connecter.
 
 #### Server_Port
-Informé **Server_Port** avec le **PORT** du link services defini sur vitre IRCD.
-Si le **PORT** est precedé d'un **+** , la connexion est **sécuriser** par SSL et necesite la présence du **package tls** sur votre système.
+Informer **Server_Port** avec le **PORT** du link services défini sur votre IRCD.
+Si le **PORT** est précédé d'un **+** , la connexion est **sécurisée** par SSL et nécéssite la présence du **package tls** sur votre système.
 
 #### Server_Password
-La connexion du service au IRCD necesite un mot de passe, fournisser-le.
+La connexion du service au IRCD nécéssite un mot de passe, fournissez-le.
 
 #### Server_Name
-Si aucune valeur est fourni à **Server_Name**, il est defini sur **Extra-Cool.FR**
+Si aucune valeur est fournie à **Server_Name**, il est defini sur **Extra-Cool.FR**
 
 #### Server_Protocol (new/old)
-Si aucune valeur est fourni à **Server_Protocol**, il est defini sur **1** et utilise le nouveau protocol IRC.
+Si aucune valeur est fournie à **Server_Protocol**, il est defini sur **1** et utilise le nouveau protocol IRC.
 
 C Server_ID
 
@@ -302,7 +302,7 @@ The same as ::irc::config but sets and gets options for the net connection only.
 #### key
 le nom de la clef à modifier
 #### value
-la valeur voulu pour la key
+la valeur voulue pour la key
 ### net **log** level message
 
 If logger is turned on by config this will write a log message at level.
